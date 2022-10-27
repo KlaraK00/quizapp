@@ -21,7 +21,7 @@ let questions = [
         "answer2": "Kürbiskerne",
         "answer3": "Nüsse",
         "answer4": "Kakao",
-        "rightAnswer": 3
+        "rightAnswer": 2
     },
     {
         "question": "Welche Kurkuma-Kombination hilft dem Körper bei Aufnahme des Wirkstoffes Curcumin?",
@@ -29,7 +29,7 @@ let questions = [
         "answer2": "Kurkuma mit Vollkorntoast",
         "answer3": "Kurkuma mit Zitrone",
         "answer4": "Kurkuma mit Pfeffer",
-        "rightAnswer": 3
+        "rightAnswer": 4
     },
     {
         "question": "Welches Lebensmittel wirkt antibakteriell und entzündungshemmend?",
@@ -51,7 +51,7 @@ let questions = [
 
 
 let currentQuestion = 0;
-
+let witchQuestionIsIt = 1;
 
 function init() {
     document.getElementById('allQuestions').innerHTML = questions.length;
@@ -69,6 +69,7 @@ function showQuestion() {
     document.getElementById('answer2').innerHTML = question['answer2'];
     document.getElementById('answer3').innerHTML = question['answer3'];
     document.getElementById('answer4').innerHTML = question['answer4'];
+    document.getElementById('witchQuestion').innerHTML = witchQuestionIsIt;
 }
 
 
@@ -79,13 +80,36 @@ function answer(selection) {
     let idOfRightAnswer = `answer${rightAnswer}`;
 
     if (selectedQuestionNumber == rightAnswer) {
-        console.log('Richtige Anwort!!');
         document.getElementById(selection).parentElement.classList.add('bg-success');
     } else {
-        console.log('Falsche Antwort!!');
         document.getElementById(selection).parentElement.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
     }
 
     document.getElementById('nextButton').disabled = false;
+}
+
+function nextQuestion() {
+    if (witchQuestionIsIt >= 6) {
+        document.getElementById('cardBody2').style = 'display: none';
+        document.getElementById('cardBody1').style = '';
+    } else {
+        currentQuestion++;
+        witchQuestionIsIt++;
+        document.getElementById('nextButton').disabled = true;
+
+        resetAnswerButtons();
+        showQuestion();
+    }
+}
+
+function resetAnswerButtons() {
+    document.getElementById('answer1').parentElement.classList.remove('bg-danger');
+    document.getElementById('answer1').parentElement.classList.remove('bg-success');
+    document.getElementById('answer2').parentElement.classList.remove('bg-danger');
+    document.getElementById('answer2').parentElement.classList.remove('bg-success');
+    document.getElementById('answer3').parentElement.classList.remove('bg-danger');
+    document.getElementById('answer3').parentElement.classList.remove('bg-success');
+    document.getElementById('answer4').parentElement.classList.remove('bg-danger');
+    document.getElementById('answer4').parentElement.classList.remove('bg-success');
 }

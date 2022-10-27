@@ -24,7 +24,12 @@
 
         <div class="card quizCard">
             <img src="img/quiz.jpg" class="card-img-top" alt="quiz-background">
-            <div class="card-body">
+
+            <div  id="cardBody1" class="card-body" style="display: none">
+            Quiz beendet
+            </div>
+
+            <div class="card-body" id="cardBody2">
                 <h5 class="card-title" id="questiontext">Frage</h5>
 
                 <div class="card mb-2 QuizAnswerCard" onclick="answer('answer1')">
@@ -53,9 +58,9 @@
 
                 <div class="question-footer">
                     <span>
-                        <b>1</b> von <b id="allQuestions">5</b> Fragen
+                        <b id="witchQuestion">1</b> von <b id="allQuestions">5</b> Fragen
                     </span>
-                    <button id="nextButton" class="btn btn-primary" disabled>Nächste Frage</button>
+                    <button onclick="nextQuestion()" id="nextButton" class="btn btn-primary" disabled>Nächste Frage</button>
                 </div>
 
             </div>
