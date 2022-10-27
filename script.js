@@ -76,9 +76,7 @@ function answer(selection) {
     let question = questions[currentQuestion];
     let rightAnswer = question['rightAnswer'];
     let selectedQuestionNumber = selection.slice(-1);
-    console.log('Selected answer is', selection);
-    console.log('Current question is', rightAnswer);
-    console.log('selectedQuestionNumber is', selectedQuestionNumber);
+    let idOfRightAnswer = `answer${rightAnswer}`;
 
     if (selectedQuestionNumber == rightAnswer) {
         console.log('Richtige Anwort!!');
@@ -86,5 +84,8 @@ function answer(selection) {
     } else {
         console.log('Falsche Antwort!!');
         document.getElementById(selection).parentElement.classList.add('bg-danger');
+        document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
     }
+
+    document.getElementById('nextButton').disabled = false;
 }
