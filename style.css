@@ -29,3 +29,20 @@ body{
 .bg-success, .bg-danger {
     color: white;
 }
+
+.textCenter {
+    text-align: center;
+}
+
+.fontSize30Px {
+    font-size: 30px;
+}
+
+.justCenter {
+    display: flex;
+    justify-content: center;
+}
+
+.padding16Px {
+    padding: 16px;
+}

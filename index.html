@@ -23,11 +23,19 @@
     <div class="container">
 
         <div class="card quizCard">
-            <img src="img/quiz.jpg" class="card-img-top" alt="quiz-background">
+            <img id="headerImg" src="img/quiz.jpg" class="card-img-top" alt="quiz-background">
 
-            <div  id="cardBody1" class="card-body" style="display: none">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            
+            <div  id="cardBody1" class="card-body fontSize30Px textCenter" style="display: none">
             Quiz beendet
             </div>
+
+            <div id="cardBody3" class="card-body textCenter" style="display: none">Du hast <b id="amountOfRightAnswers">X</b> Fragen von <b id="amountOfAllAnswers">X</b> richtig beantwortet!</div>
+
+            <div class="justCenter padding16Px" id="endscreenButton" style="display: none"><button onclick="newGame()" class="btn btn-primary">Neustart</button></div>
 
             <div class="card-body" id="cardBody2">
                 <h5 class="card-title" id="questiontext">Frage</h5>
@@ -58,7 +66,7 @@
 
                 <div class="question-footer">
                     <span>
-                        <b id="witchQuestion">1</b> von <b id="allQuestions">5</b> Fragen
+                        <b id="whichQuestion">1</b> von <b id="allQuestions">5</b> Fragen
                     </span>
                     <button onclick="nextQuestion()" id="nextButton" class="btn btn-primary" disabled>Nächste Frage</button>
                 </div>

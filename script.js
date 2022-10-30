@@ -51,11 +51,16 @@ let questions = [
 
 
 let currentQuestion = 0;
-let witchQuestionIsIt = 1;
+let whichQuestionIsIt = 1;
+let rightAnswers = 0;
+let audioWrongAnswer = new Audio('./mp3/wrongAnswer.mp3');
+let audioRightAnswer = new Audio('./mp3/rightAnswer.mp3');
+let audioStartGame = new Audio('./mp3/startGame.mp3');
+let audioEndOfGame = new Audio('./mp3/endOfGame.mp3');
+
 
 function init() {
     document.getElementById('allQuestions').innerHTML = questions.length;
-
     showQuestion();
 }
 
@@ -69,7 +74,7 @@ function showQuestion() {
     document.getElementById('answer2').innerHTML = question['answer2'];
     document.getElementById('answer3').innerHTML = question['answer3'];
     document.getElementById('answer4').innerHTML = question['answer4'];
-    document.getElementById('witchQuestion').innerHTML = witchQuestionIsIt;
+    document.getElementById('whichQuestion').innerHTML = whichQuestionIsIt;
 }
 
 
@@ -81,22 +86,59 @@ function answer(selection) {
 
     if (selectedQuestionNumber == rightAnswer) {
         document.getElementById(selection).parentElement.classList.add('bg-success');
+        rightAnswers++;
+        audioStartGame.pause();
+        audioStartGame.currentTime = 0;
+        audioRightAnswer.pause();
+        audioRightAnswer.currentTime = 0;
+        audioWrongAnswer.pause();
+        audioWrongAnswer.currentTime = 0;
+        audioRightAnswer.play();
     } else {
         document.getElementById(selection).parentElement.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
+        audioStartGame.pause();
+        audioStartGame.currentTime = 0;
+        audioRightAnswer.pause();
+        audioRightAnswer.currentTime = 0;
+        audioWrongAnswer.pause();
+        audioWrongAnswer.currentTime = 0;
+        audioWrongAnswer.play();
     }
 
     document.getElementById('nextButton').disabled = false;
 }
 
 function nextQuestion() {
-    if (witchQuestionIsIt >= 6) {
+    if (whichQuestionIsIt >= 6) {
+        audioRightAnswer.pause();
+        audioRightAnswer.currentTime = 0;
+        audioWrongAnswer.pause();
+        audioWrongAnswer.currentTime = 0;
+        audioEndOfGame.play();
+
+        currentQuestion++;
+        let percent = currentQuestion / questions.length;
+        percent = Math.round(percent * 100);
+        document.getElementById('progressBar').style = `width: ${percent}%;`;
+        document.getElementById('progressBar').innerHTML = `${percent}%`;
+
         document.getElementById('cardBody2').style = 'display: none';
         document.getElementById('cardBody1').style = '';
+        document.getElementById('cardBody3').style = '';
+        document.getElementById('endscreenButton').style = '';
+        document.getElementById('headerImg').src = 'img/endScreenImg.jpg';
+        document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
+        document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
+        
     } else {
-        currentQuestion++;
-        witchQuestionIsIt++;
+        currentQuestion ++;
+        whichQuestionIsIt++;
+        let percent = currentQuestion / questions.length;
+        percent = Math.round(percent * 100);
         document.getElementById('nextButton').disabled = true;
+        document.getElementById('progressBar').style = `width: ${percent}%;`;
+        document.getElementById('progressBar').innerHTML = `${percent}%`;
 
         resetAnswerButtons();
         showQuestion();
@@ -112,4 +154,25 @@ function resetAnswerButtons() {
     document.getElementById('answer3').parentElement.classList.remove('bg-success');
     document.getElementById('answer4').parentElement.classList.remove('bg-danger');
     document.getElementById('answer4').parentElement.classList.remove('bg-success');
+}
+
+function newGame() {
+    audioEndOfGame.pause();
+    audioEndOfGame.currentTime = 0;
+    audioStartGame.play();
+    currentQuestion = 0;
+    whichQuestionIsIt = 1;
+    rightAnswers = 0;
+
+    document.getElementById('progressBar').style = '';
+    document.getElementById('progressBar').innerHTML = '';
+
+    document.getElementById('cardBody2').style = '';
+    document.getElementById('cardBody1').style = 'display: none';
+    document.getElementById('cardBody3').style = 'display: none';
+    document.getElementById('endscreenButton').style = 'display: none';
+    document.getElementById('headerImg').src = 'img/quiz.jpg';
+
+    resetAnswerButtons();
+    showQuestion();
 }
