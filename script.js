@@ -40,7 +40,7 @@ let questions = [
         "rightAnswer": 3
     },
     {
-        "question": "Was mit Pancakes (100g Zucker) kombinieren, damit der Blutzuckerspiegel nicht so viel in die Höhe rast?",
+        "question": "Was kann man mit Pancakes kombinieren, damit der Blutzuckerspiegel nicht so schnell nach oben geht?",
         "answer1": "Noch mehr Zucker in Form von Karamell DAVOR zu sich nehmen.",
         "answer2": "Zuckerwatte essen, durch die Luft verringert sich die Zuckeraufnahme innerhalb der nächsten 3 Stunden.",
         "answer3": "Pankcakes schneller essen, dadurch bekommt der Körper Stress. Stress ist immer gut.",

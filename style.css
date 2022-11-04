@@ -1,17 +1,30 @@
 body{
-    background-color: blue;
+    background-color: rgba(186,232,93,255);
+    color: white;
 }
 
 .container {
-    min-height: 100vh;
-    background-color: blue;
+    height: 100vh;
+    background-color: rgba(186,232,93,255);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .quizCard {
-    width: 30rem;
+    width: 30rem; 
+}
+
+.backgroundImg {
+    background-image: url('./img/quizBackgroundBehindText2.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.card {
+    --bs-card-bg: none;
 }
 
 .question-footer {
@@ -43,6 +56,36 @@ body{
     justify-content: center;
 }
 
+.progress {
+    --bs-progress-bg: rgba(186,232,93,255);
+}
+
 .padding16Px {
     padding: 16px;
+}
+.card-img, .card-img-bottom, .card-img-top {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+@media (max-height: 850px){
+    body {
+        font-size: 12px;
+    }
+    h5 {
+        font-size: 14px;
+    }
+}
+
+@media (max-height: 730px) {
+    .card-img, .card-img-bottom, .card-img-top {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .card-img, .card-img-bottom, .card-img-top {
+        display: none;
+    }
 }
