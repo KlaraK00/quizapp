@@ -51,6 +51,7 @@ let questions = [
 
 
 let currentQuestion = 0;
+let currentMenu = 1; //bei Startseite anpassen deswegen Wert 1 derweil
 let whichQuestionIsIt = 1;
 let rightAnswers = 0;
 let audioWrongAnswer = new Audio('./mp3/wrongAnswer.mp3');
@@ -83,9 +84,13 @@ function answer(selection) {
     let rightAnswer = question['rightAnswer'];
     let selectedQuestionNumber = selection.slice(-1);
     let idOfRightAnswer = `answer${rightAnswer}`;
+    let idOfRightLetter = `letter${rightAnswer}`;
+    let idOfLetter = `letter${selectedQuestionNumber}`;
 
     if (selectedQuestionNumber == rightAnswer) {
         document.getElementById(selection).parentElement.classList.add('bg-success');
+        document.getElementById(idOfLetter).classList.add('letterBgSuccess');
+
         rightAnswers++;
         audioStartGame.pause();
         audioStartGame.currentTime = 0;
@@ -96,7 +101,10 @@ function answer(selection) {
         audioRightAnswer.play();
     } else {
         document.getElementById(selection).parentElement.classList.add('bg-danger');
+        document.getElementById(idOfLetter).classList.add('letterBgDanger');
         document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
+        document.getElementById(idOfRightLetter).classList.add('letterBgSuccess');
+
         audioStartGame.pause();
         audioStartGame.currentTime = 0;
         audioRightAnswer.pause();
@@ -106,54 +114,121 @@ function answer(selection) {
         audioWrongAnswer.play();
     }
 
-    document.getElementById('nextButton').disabled = false;
+    document.getElementById('nextButton').style.pointerEvents= 'auto';
+    document.getElementById('nextButton').src = './img/arrowForwardLavendel.png';
+    document.getElementById('circleBlack').classList.add('d-none');    
 }
 
 function nextQuestion() {
     if (whichQuestionIsIt >= 6) {
-        audioRightAnswer.pause();
-        audioRightAnswer.currentTime = 0;
-        audioWrongAnswer.pause();
-        audioWrongAnswer.currentTime = 0;
-        audioEndOfGame.play();
-
-        currentQuestion++;
-        let percent = currentQuestion / questions.length;
-        percent = Math.round(percent * 100);
-        document.getElementById('progressBar').style = `width: ${percent}%;`;
-        document.getElementById('progressBar').innerHTML = `${percent}%`;
-
-        document.getElementById('cardBody2').style = 'display: none';
-        document.getElementById('cardBody1').style = '';
-        document.getElementById('cardBody3').style = '';
-        document.getElementById('endscreenButton').style = '';
-        document.getElementById('headerImg').src = 'img/endScreenImg.jpg';
-        document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
-        document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
-        
+        if (rightAnswers < 3) {
+            youAreNotSoSmart();
+        } else if (rightAnswers > 4) {
+            youAreSmart();
+        } else {
+            youAreMiddleSmart();
+        }
     } else {
         currentQuestion ++;
         whichQuestionIsIt++;
         let percent = currentQuestion / questions.length;
         percent = Math.round(percent * 100);
-        document.getElementById('nextButton').disabled = true;
+        document.getElementById('nextButton').style.pointerEvents= 'none';
+        document.getElementById('nextButton').src = './img/arrowForward.png';
+        document.getElementById('circleBlack').classList.remove('d-none');
         document.getElementById('progressBar').style = `width: ${percent}%;`;
         document.getElementById('progressBar').innerHTML = `${percent}%`;
 
         resetAnswerButtons();
         showQuestion();
+
+        if (currentMenu = 1) {
+            menu();
+        }
     }
 }
 
+function youAreNotSoSmart() {
+    audioRightAnswer.pause();
+    audioRightAnswer.currentTime = 0;
+    audioWrongAnswer.pause();
+    audioWrongAnswer.currentTime = 0;
+    audioEndOfGame.play();
+
+    currentQuestion++;
+    let percent = currentQuestion / questions.length;
+    percent = Math.round(percent * 100);
+    document.getElementById('progressBar').style = `width: ${percent}%;`;
+    document.getElementById('progressBar').innerHTML = `${percent}%`;
+
+    document.getElementById('cardBody2').style = 'display: none';
+    document.getElementById('cardBody1').style = '';
+    document.getElementById('cardBody3').style = '';
+    document.getElementById('endscreenButton').style = '';
+    document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
+    document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
+
+    document.getElementById('questionFooter').classList.add('d-none');
+}
+
+function youAreSmart() {
+    audioRightAnswer.pause();
+    audioRightAnswer.currentTime = 0;
+    audioWrongAnswer.pause();
+    audioWrongAnswer.currentTime = 0;
+    audioEndOfGame.play();
+
+    currentQuestion++;
+    let percent = currentQuestion / questions.length;
+    percent = Math.round(percent * 100);
+    document.getElementById('progressBar').style = `width: ${percent}%;`;
+    document.getElementById('progressBar').innerHTML = `${percent}%`;
+
+    document.getElementById('cardBody2').style = 'display: none';
+    document.getElementById('cardBody1').style = '';
+    document.getElementById('cardBody3').style = '';
+    document.getElementById('endscreenButton').style = '';
+    document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
+    document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
+
+    document.getElementById('questionFooter').classList.add('d-none');
+}
+
+function youAreMiddleSmart() {
+    audioRightAnswer.pause();
+    audioRightAnswer.currentTime = 0;
+    audioWrongAnswer.pause();
+    audioWrongAnswer.currentTime = 0;
+    audioEndOfGame.play();
+
+    currentQuestion++;
+    let percent = currentQuestion / questions.length;
+    percent = Math.round(percent * 100);
+    document.getElementById('progressBar').style = `width: ${percent}%;`;
+    document.getElementById('progressBar').innerHTML = `${percent}%`;
+
+    document.getElementById('cardBody2').style = 'display: none';
+    document.getElementById('cardBody1').style = '';
+    document.getElementById('cardBody3').style = '';
+    document.getElementById('endscreenButton').style = '';
+    document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
+    document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
+
+    document.getElementById('questionFooter').classList.add('d-none');
+}
+
 function resetAnswerButtons() {
-    document.getElementById('answer1').parentElement.classList.remove('bg-danger');
-    document.getElementById('answer1').parentElement.classList.remove('bg-success');
-    document.getElementById('answer2').parentElement.classList.remove('bg-danger');
-    document.getElementById('answer2').parentElement.classList.remove('bg-success');
-    document.getElementById('answer3').parentElement.classList.remove('bg-danger');
-    document.getElementById('answer3').parentElement.classList.remove('bg-success');
-    document.getElementById('answer4').parentElement.classList.remove('bg-danger');
-    document.getElementById('answer4').parentElement.classList.remove('bg-success');
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`answer${i}`).parentElement.classList.remove('bg-danger');
+        document.getElementById(`answer${i}`).parentElement.classList.remove('bg-success');
+        document.getElementById(`letter${i}`).classList.remove('letterBgSuccess');
+        document.getElementById(`letter${i}`).classList.remove('letterBgDanger');
+    }
+}
+
+function menu() {
+    document.getElementById(`menu${currentQuestion}`).style.borderLeft= '4px solid white';
+    currentMenu ++;
 }
 
 function newGame() {
@@ -167,11 +242,16 @@ function newGame() {
     document.getElementById('progressBar').style = '';
     document.getElementById('progressBar').innerHTML = '';
 
+    document.getElementById('nextButton').src = './img/arrowForward.png';
+    document.getElementById('circleBlack').classList.remove('d-none');
+
     document.getElementById('cardBody2').style = '';
     document.getElementById('cardBody1').style = 'display: none';
     document.getElementById('cardBody3').style = 'display: none';
     document.getElementById('endscreenButton').style = 'display: none';
-    document.getElementById('headerImg').src = 'img/quiz.jpg';
+
+    document.getElementById('questionFooter').classList.remove('d-none');
+    document.getElementById('nextButton').style.pointerEvents= 'none';
 
     resetAnswerButtons();
     showQuestion();

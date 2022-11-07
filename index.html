@@ -8,22 +8,53 @@
     <title>Meine Quizapp</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./pt-sans.css">
+    <link rel="stylesheet" href="./rubik.css">
     <script src="./script.js"></script>
 
 </head>
 
 <body onload="init()">
 
+
+
     <div class="container">
 
-        <div class="card quizCard">
-            <img id="headerImg" src="img/quiz.jpg" class="card-img-top" alt="quiz-background">
-
-            <div class="progress">
-                <div id="progressBar" class="progress-bar"></div>
+        <div class="progress">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        
+        <div class="divParent yesBorder">
+            <div class="leftContainer leftBorderRadius">
+                <div class="leftContainerFirstLastChild">
+                    <img src="./img/logo.png" alt="Quizapp">
+                </div>
+                <div class="menu">
+                    <div id="menu1">
+                        Vitamine
+                    </div>
+                    <div id="menu2">
+                        Mineralien
+                    </div>
+                    <div id="menu3">
+                        Curcumin
+                    </div>
+                    <div id="menu4">
+                        Ingwer
+                    </div>
+                    <div id="menu5">
+                        Zucker
+                    </div>
+                </div>
+                <div class="leftContainerFirstLastChild">
+                    <span>
+                        <b id="whichQuestion">1</b> von <b id="allQuestions">5</b> Fragen
+                    </span>
+                </div>
             </div>
 
-            <div class="backgroundImg">            
+            <div class="card quizCard noBorder">
+      
                 <div  id="cardBody1" class="card-body fontSize30Px textCenter" style="display: none">
                 Quiz beendet
                 </div>
@@ -36,40 +67,57 @@
                     <h5 class="card-title" id="questiontext">Frage</h5>
 
                     <div class="card mb-2 QuizAnswerCard" onclick="answer('answer1')">
-                        <div class="card-body" id="answer1">
-                            Answer
+                        <div class="card-body cardBody">
+                            <div id="letter1">
+                                A
+                            </div>
+                            <span id="answer1">
+                                Answer
+                            </span>
                         </div>
                     </div>
 
                     <div class="card mb-2 QuizAnswerCard" onclick="answer('answer2')">
-                        <div class="card-body" id="answer2">
-                            Answer
+                        <div class="card-body cardBody">
+                            <div id="letter2">
+                                B
+                            </div>
+                            <span id="answer2">
+                                Answer
+                            </span>
                         </div>
 
                     </div>
                     <div class="card mb-2 QuizAnswerCard" onclick="answer('answer3')">
-                        <div class="card-body" id="answer3">
-                            Answer
+                        <div class="card-body cardBody">
+                            <div id="letter3">
+                                C
+                            </div>
+                            <span id="answer3">
+                                Answer
+                            </span>                           
                         </div>
                     </div>
 
                     <div class="card mb-2 QuizAnswerCard" onclick="answer('answer4')">
-                        <div class="card-body" id="answer4">
-                            Answer
+                        <div class="card-body cardBody">
+                            <div id="letter4">
+                                D
+                            </div>
+                            <span id="answer4">
+                                Answer
+                            </span>    
                         </div>
                     </div>
-
-                    <div class="question-footer">
-                        <span>
-                            <b id="whichQuestion">1</b> von <b id="allQuestions">5</b> Fragen
-                        </span>
-                        <button onclick="nextQuestion()" id="nextButton" class="btn btn-primary" disabled>Nächste Frage</button>
-                    </div>
                 </div>
-
             </div>
         </div>
-
+        <div id="questionFooter" class="questionFooter">
+            <div>
+                <img id="circleBlack" class="questionFooterCircle" src="./img/circleBlack.png">
+            </div>
+            <img id="nextButton" class="questionFooterArrow" onclick="nextQuestion()" src="./img/arrowForward.png" alt="arrow forward">
+        </div>
     </div>
 </body>
 
