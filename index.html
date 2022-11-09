@@ -14,23 +14,24 @@
 
 </head>
 
-<body onload="init()">
-
-
+<body>
 
     <div class="container">
 
         <div class="progress">
             <div id="progressBar" class="progress-bar"></div>
         </div>
-        
+
+        <div id="leftSpace" class="leftSpace" style="display: none">
+        </div>
+
         <div class="divParent yesBorder">
             <div class="leftContainer leftBorderRadius">
                 <div class="leftContainerFirstLastChild">
                     <img src="./img/logo.png" alt="Quizapp">
                 </div>
                 <div class="menu">
-                    <div id="menu1">
+                    <div class="borderLeftWhite" id="menu1">
                         Vitamine
                     </div>
                     <div id="menu2">
@@ -53,18 +54,35 @@
                 </div>
             </div>
 
-            <div class="card quizCard noBorder">
+            <div id="card" class="card quizCard noBorder justCenter startScreenBgImg">
+
+                <div id="startDisplay" class="positionCenter fontSize24Px height100perc">  
+                    <div class="alignEnd height50perc">   
+                        <div class="fontSansBold">
+                            Welcome to <br>
+                            The Awesome Nutrition Quiz!
+                        </div>
+                    </div> 
+                    <div class="fontSans height25perc fontSize18pxPadTop10Px">
+                        Ready for the Challenge?
+                    </div>
+                    <div class="height25perc divStartButton">
+                        <button class="btn btn-primary buttonColor" onclick="startNow()">START NOW ></button>
+                    </div>
+                </div>
       
-                <div  id="cardBody1" class="card-body fontSize30Px textCenter" style="display: none">
-                Quiz beendet
+                <div  id="cardBody1" class="card-body fontSize20Px fontBold textCenter justAlignCenter flexNone cardBodyAbsolute1" style="display: none">
+                    <img id="brain" class="widthHeight80Px" src="./img/brainResult.png" alt="brain">
+                    COMPLETE <br>
+                    NUTRITION QUIZ
                 </div>
 
-                <div id="cardBody3" class="card-body textCenter" style="display: none">Du hast <b id="amountOfRightAnswers">X</b> von <b id="amountOfAllAnswers">X</b> Fragen richtig beantwortet!</div>
+                <div id="cardBody3" class="card-body textCenter flexNone cardBodyAbsolute2" style="display: none">YOUR SCORE <b id="amountOfRightAnswers">X</b><b>/</b><b id="amountOfAllAnswers">X</b></div>
 
-                <div class="justCenter padding16Px" id="endscreenButton" style="display: none"><button onclick="newGame()" class="btn btn-primary">Neustart</button></div>
+                <div class="justCenter padding16Px cardBodyAbsolute3" id="endscreenButton" style="display: none"><button onclick="newGame()" class="btn btn-primary">REPLAY</button></div>
 
-                <div class="card-body" id="cardBody2">
-                    <h5 class="card-title" id="questiontext">Frage</h5>
+                <div class="card-body justAround " style="display: none" id="cardBody2">
+                    <h5 class="card-title mainQuestion" id="questiontext">Frage</h5>
 
                     <div class="card mb-2 QuizAnswerCard" onclick="answer('answer1')">
                         <div class="card-body cardBody">
@@ -112,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div id="questionFooter" class="questionFooter">
+        <div id="questionFooter" class="questionFooter" style="display: none;">
             <div>
                 <img id="circleBlack" class="questionFooterCircle" src="./img/circleBlack.png">
             </div>

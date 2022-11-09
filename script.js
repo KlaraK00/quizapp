@@ -51,7 +51,7 @@ let questions = [
 
 
 let currentQuestion = 0;
-let currentMenu = 1; //bei Startseite anpassen deswegen Wert 1 derweil
+let currentMenu = 0;
 let whichQuestionIsIt = 1;
 let rightAnswers = 0;
 let audioWrongAnswer = new Audio('./mp3/wrongAnswer.mp3');
@@ -60,21 +60,29 @@ let audioStartGame = new Audio('./mp3/startGame.mp3');
 let audioEndOfGame = new Audio('./mp3/endOfGame.mp3');
 
 
-function init() {
-    document.getElementById('allQuestions').innerHTML = questions.length;
+function startNow() {
+    showBackground();
     showQuestion();
 }
 
+function showBackground() {
+    document.getElementById('startDisplay').style = 'display: none';
+    document.getElementById('questionFooter').style = '';
+    document.getElementById('leftSpace').style = '';
+    document.getElementById('card').classList.remove('flexAuto');
+    document.getElementById('card').classList.remove('startScreenBgImg');
+    document.getElementById('cardBody2').style = '';
+    document.getElementById('allQuestions').innerHTML = questions.length;
+}
 
 function showQuestion() {
     let question = questions[currentQuestion];
     let questiontext = document.getElementById('questiontext');
     questiontext.innerHTML = '';
     questiontext.innerHTML = question['question'];
-    document.getElementById('answer1').innerHTML = question['answer1'];
-    document.getElementById('answer2').innerHTML = question['answer2'];
-    document.getElementById('answer3').innerHTML = question['answer3'];
-    document.getElementById('answer4').innerHTML = question['answer4'];
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`answer${i}`).innerHTML = question[`answer${i}`];
+    }
     document.getElementById('whichQuestion').innerHTML = whichQuestionIsIt;
 }
 
@@ -83,138 +91,177 @@ function answer(selection) {
     let question = questions[currentQuestion];
     let rightAnswer = question['rightAnswer'];
     let selectedQuestionNumber = selection.slice(-1);
+
+    resetAudioForAnswers();
+    rightOrFalseAnswer(selection, selectedQuestionNumber, rightAnswer);
+    buttonClickable();
+}
+
+function resetAudioForAnswers() {
+    audioStartGame.pause();
+    audioStartGame.currentTime = 0;
+    audioRightAnswer.pause();
+    audioRightAnswer.currentTime = 0;
+    audioWrongAnswer.pause();
+    audioWrongAnswer.currentTime = 0;
+}
+
+function rightOrFalseAnswer(selection, selectedQuestionNumber, rightAnswer) {
+    if (selectedQuestionNumber == rightAnswer) {
+        theRightAnswer(selection);
+    } else {
+        theFalseAnswer(selection);
+    }
+}
+
+function theRightAnswer(selection){
+    rightAnswerColor(selection);
+    rightAnswerAudio();
+    rightAnswerAddAmount();
+}
+
+function rightAnswerColor(selection) {
+    let selectedQuestionNumber = selection.slice(-1);
+    let idOfLetter = `letter${selectedQuestionNumber}`;
+
+    document.getElementById(selection).parentElement.classList.add('bg-success');
+    document.getElementById(idOfLetter).classList.add('letterBgSuccess');
+}
+
+function rightAnswerAudio() {
+    audioRightAnswer.play();
+}
+
+function rightAnswerAddAmount() {
+    rightAnswers++;
+}
+
+function theFalseAnswer(selection) {
+    falseAnswerColor(selection);
+    falseAnswerAudio();
+}
+
+function falseAnswerColor(selection) {
+    let question = questions[currentQuestion];
+    let rightAnswer = question['rightAnswer'];
+    let selectedQuestionNumber = selection.slice(-1);
     let idOfRightAnswer = `answer${rightAnswer}`;
     let idOfRightLetter = `letter${rightAnswer}`;
     let idOfLetter = `letter${selectedQuestionNumber}`;
 
-    if (selectedQuestionNumber == rightAnswer) {
-        document.getElementById(selection).parentElement.classList.add('bg-success');
-        document.getElementById(idOfLetter).classList.add('letterBgSuccess');
+    document.getElementById(selection).parentElement.classList.add('bg-danger');
+    document.getElementById(idOfLetter).classList.add('letterBgDanger');
+    document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
+    document.getElementById(idOfRightLetter).classList.add('letterBgSuccess');
+}
 
-        rightAnswers++;
-        audioStartGame.pause();
-        audioStartGame.currentTime = 0;
-        audioRightAnswer.pause();
-        audioRightAnswer.currentTime = 0;
-        audioWrongAnswer.pause();
-        audioWrongAnswer.currentTime = 0;
-        audioRightAnswer.play();
-    } else {
-        document.getElementById(selection).parentElement.classList.add('bg-danger');
-        document.getElementById(idOfLetter).classList.add('letterBgDanger');
-        document.getElementById(idOfRightAnswer).parentElement.classList.add('bg-success');
-        document.getElementById(idOfRightLetter).classList.add('letterBgSuccess');
+function falseAnswerAudio() {
+    audioWrongAnswer.play(); 
+}
 
-        audioStartGame.pause();
-        audioStartGame.currentTime = 0;
-        audioRightAnswer.pause();
-        audioRightAnswer.currentTime = 0;
-        audioWrongAnswer.pause();
-        audioWrongAnswer.currentTime = 0;
-        audioWrongAnswer.play();
-    }
-
+function buttonClickable() {
     document.getElementById('nextButton').style.pointerEvents= 'auto';
     document.getElementById('nextButton').src = './img/arrowForwardLavendel.png';
     document.getElementById('circleBlack').classList.add('d-none');    
 }
 
 function nextQuestion() {
+    currentQuestionAddAmount();
+    nextQuestionOrEnd();
+}
+
+function currentQuestionAddAmount() {
+    currentQuestion++;
+}
+
+function nextQuestionOrEnd() {
     if (whichQuestionIsIt >= 6) {
-        if (rightAnswers < 3) {
-            youAreNotSoSmart();
-        } else if (rightAnswers > 4) {
-            youAreSmart();
-        } else {
-            youAreMiddleSmart();
-        }
+        basicEnd();
+        endByScore();
     } else {
-        currentQuestion ++;
-        whichQuestionIsIt++;
-        let percent = currentQuestion / questions.length;
-        percent = Math.round(percent * 100);
-        document.getElementById('nextButton').style.pointerEvents= 'none';
-        document.getElementById('nextButton').src = './img/arrowForward.png';
-        document.getElementById('circleBlack').classList.remove('d-none');
-        document.getElementById('progressBar').style = `width: ${percent}%;`;
-        document.getElementById('progressBar').innerHTML = `${percent}%`;
-
-        resetAnswerButtons();
-        showQuestion();
-
-        if (currentMenu = 1) {
-            menu();
-        }
+        showNextPageQuestions();
     }
 }
 
-function youAreNotSoSmart() {
+function basicEnd() {
+    resetAndPlayAudioEndscreen();
+    processBar100Perc();
+    basicEndBackground();
+}
+
+function endByScore() {
+    if (rightAnswers < 3) {
+        youAreNotSoSmart();
+    } else if (rightAnswers > 4) {
+        youAreSmart();
+    } else {
+        youAreMiddleSmart();
+    }
+}
+
+function showNextPageQuestions() {
+    whichQuestionIsItAddAmount();
+    processBarFitPerc();
+    resetAnswerButtons();
+    showQuestion();
+    doTheRightMenu();
+}
+
+function resetAndPlayAudioEndscreen() {
     audioRightAnswer.pause();
     audioRightAnswer.currentTime = 0;
     audioWrongAnswer.pause();
     audioWrongAnswer.currentTime = 0;
     audioEndOfGame.play();
+}
 
-    currentQuestion++;
+function processBar100Perc() {
     let percent = currentQuestion / questions.length;
     percent = Math.round(percent * 100);
     document.getElementById('progressBar').style = `width: ${percent}%;`;
     document.getElementById('progressBar').innerHTML = `${percent}%`;
+}
 
+function basicEndBackground() {
+    document.getElementById('card').classList.add('centerCenter');
     document.getElementById('cardBody2').style = 'display: none';
     document.getElementById('cardBody1').style = '';
     document.getElementById('cardBody3').style = '';
     document.getElementById('endscreenButton').style = '';
     document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
     document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
-
     document.getElementById('questionFooter').classList.add('d-none');
+    document.getElementById('leftSpace').classList.add('d-none');
+}
+
+function youAreNotSoSmart() {
+    document.getElementById('brain').src = './img/brainResultRed.png';
+    document.getElementById('card').classList.add('looseBackground');
 }
 
 function youAreSmart() {
-    audioRightAnswer.pause();
-    audioRightAnswer.currentTime = 0;
-    audioWrongAnswer.pause();
-    audioWrongAnswer.currentTime = 0;
-    audioEndOfGame.play();
-
-    currentQuestion++;
-    let percent = currentQuestion / questions.length;
-    percent = Math.round(percent * 100);
-    document.getElementById('progressBar').style = `width: ${percent}%;`;
-    document.getElementById('progressBar').innerHTML = `${percent}%`;
-
-    document.getElementById('cardBody2').style = 'display: none';
-    document.getElementById('cardBody1').style = '';
-    document.getElementById('cardBody3').style = '';
-    document.getElementById('endscreenButton').style = '';
-    document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
-    document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
-
-    document.getElementById('questionFooter').classList.add('d-none');
+    document.getElementById('brain').src = './img/brainResult.png';
+    document.getElementById('card').classList.add('winnerBackground');
 }
 
 function youAreMiddleSmart() {
-    audioRightAnswer.pause();
-    audioRightAnswer.currentTime = 0;
-    audioWrongAnswer.pause();
-    audioWrongAnswer.currentTime = 0;
-    audioEndOfGame.play();
+    document.getElementById('brain').src = './img/brainResultOrange.png';
+    document.getElementById('card').classList.add('middleWinnerBackground');
+}
 
-    currentQuestion++;
+function whichQuestionIsItAddAmount() {
+    whichQuestionIsIt++;
+}
+
+function processBarFitPerc() {
     let percent = currentQuestion / questions.length;
+
     percent = Math.round(percent * 100);
+    document.getElementById('nextButton').style.pointerEvents= 'none';
+    document.getElementById('nextButton').src = './img/arrowForward.png';
+    document.getElementById('circleBlack').classList.remove('d-none');
     document.getElementById('progressBar').style = `width: ${percent}%;`;
     document.getElementById('progressBar').innerHTML = `${percent}%`;
-
-    document.getElementById('cardBody2').style = 'display: none';
-    document.getElementById('cardBody1').style = '';
-    document.getElementById('cardBody3').style = '';
-    document.getElementById('endscreenButton').style = '';
-    document.getElementById('amountOfRightAnswers').innerHTML = rightAnswers;
-    document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
-
-    document.getElementById('questionFooter').classList.add('d-none');
 }
 
 function resetAnswerButtons() {
@@ -226,33 +273,93 @@ function resetAnswerButtons() {
     }
 }
 
-function menu() {
-    document.getElementById(`menu${currentQuestion}`).style.borderLeft= '4px solid white';
-    currentMenu ++;
+function doTheRightMenu() {
+    if (whichQuestionIsIt == 3) {
+        secondMenu();
+    }
+    if (whichQuestionIsIt == 4) {
+        thirdMenu();
+    }
+    if (whichQuestionIsIt == 5) {
+        fourthMenu();
+    }
+    if (whichQuestionIsIt == 6) {
+        fifthMenu();
+    }
+}
+
+function secondMenu() {
+    document.getElementById('menu1').classList.remove('borderLeftWhite');
+    document.getElementById('menu2').classList.add('borderLeftWhite');
+}
+
+function thirdMenu() {
+    document.getElementById('menu2').classList.remove('borderLeftWhite');
+    document.getElementById('menu3').classList.add('borderLeftWhite');
+}
+
+function fourthMenu() {
+    document.getElementById('menu3').classList.remove('borderLeftWhite');
+    document.getElementById('menu4').classList.add('borderLeftWhite');   
+}
+
+function fifthMenu() {
+    document.getElementById('menu4').classList.remove('borderLeftWhite');
+    document.getElementById('menu5').classList.add('borderLeftWhite');  
 }
 
 function newGame() {
+    resetAndPlayAudioNewGame();
+    resetAllAmounts();
+    resetBackground();
+    resetMenu();
+    resetProcessBar();
+    resetArrowButton();
+    resetCard();
+    resetAnswerButtons();
+    showQuestion();
+}
+
+function resetAndPlayAudioNewGame() {
     audioEndOfGame.pause();
     audioEndOfGame.currentTime = 0;
     audioStartGame.play();
+}
+
+function resetAllAmounts() {
     currentQuestion = 0;
     whichQuestionIsIt = 1;
     rightAnswers = 0;
+}
 
+function resetBackground() {
+    document.getElementById('card').classList.remove('middleWinnerBackground');
+    document.getElementById('card').classList.remove('winnerBackground');
+    document.getElementById('card').classList.remove('looseBackground');
+}
+
+function resetMenu() {
+    document.getElementById('menu5').classList.remove('borderLeftWhite');
+    document.getElementById('menu1').classList.add('borderLeftWhite');
+}
+
+function resetProcessBar() {
     document.getElementById('progressBar').style = '';
     document.getElementById('progressBar').innerHTML = '';
+}
 
+function resetArrowButton() {
     document.getElementById('nextButton').src = './img/arrowForward.png';
     document.getElementById('circleBlack').classList.remove('d-none');
+    document.getElementById('questionFooter').classList.remove('d-none');
+    document.getElementById('leftSpace').classList.remove('d-none');
+    document.getElementById('nextButton').style.pointerEvents= 'none';
+}
 
+function resetCard() {
+    document.getElementById('card').classList.remove('centerCenter');
     document.getElementById('cardBody2').style = '';
     document.getElementById('cardBody1').style = 'display: none';
     document.getElementById('cardBody3').style = 'display: none';
     document.getElementById('endscreenButton').style = 'display: none';
-
-    document.getElementById('questionFooter').classList.remove('d-none');
-    document.getElementById('nextButton').style.pointerEvents= 'none';
-
-    resetAnswerButtons();
-    showQuestion();
 }
