@@ -24,7 +24,7 @@ let questions = [
         "rightAnswer": 2
     },
     {
-        "question": "Welche Kurkuma-Kombination hilft dem Körper bei Aufnahme des Wirkstoffes Curcumin?",
+        "question": "Welche Kurkuma-Kombination hilft dem Körper bei der Aufnahme des Wirkstoffes Curcumin?",
         "answer1": "Kurkuma mit Avocado",
         "answer2": "Kurkuma mit Vollkorntoast",
         "answer3": "Kurkuma mit Zitrone",
@@ -61,11 +61,12 @@ let audioEndOfGame = new Audio('./mp3/endOfGame.mp3');
 
 
 function startNow() {
-    showBackground();
+    showBackground1();
+    showBackground2();
     showQuestion();
 }
 
-function showBackground() {
+function showBackground1() {
     document.getElementById('startDisplay').style = 'display: none';
     document.getElementById('questionFooter').style = '';
     document.getElementById('leftSpace').style = '';
@@ -73,6 +74,16 @@ function showBackground() {
     document.getElementById('card').classList.remove('startScreenBgImg');
     document.getElementById('cardBody2').style = '';
     document.getElementById('allQuestions').innerHTML = questions.length;
+}
+
+function showBackground2() {
+    document.getElementById('leftContLastChildSpan').style = '';
+    document.getElementById('leftSpace').parentElement.style.justifyContent = 'normal';
+    document.getElementById('menu1').classList.add('borderLeftWhite');
+    document.getElementById('progressBar').style = 'width: 0%';
+    if (window.screen.width <= 500) {
+        document.getElementById('leftSpace').parentElement.style.justifyContent = 'center';
+      }
 }
 
 function showQuestion() {
@@ -107,10 +118,17 @@ function resetAudioForAnswers() {
 }
 
 function rightOrFalseAnswer(selection, selectedQuestionNumber, rightAnswer) {
+    notClickableAnswerButtons();
     if (selectedQuestionNumber == rightAnswer) {
         theRightAnswer(selection);
     } else {
         theFalseAnswer(selection);
+    }
+}
+
+function notClickableAnswerButtons() {
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`answer${i}`).parentElement.parentElement.style.pointerEvents= 'none';
     }
 }
 
@@ -205,6 +223,7 @@ function showNextPageQuestions() {
     resetAnswerButtons();
     showQuestion();
     doTheRightMenu();
+    clickableAnswerButtons();
 }
 
 function resetAndPlayAudioEndscreen() {
@@ -232,6 +251,8 @@ function basicEndBackground() {
     document.getElementById('amountOfAllAnswers').innerHTML= whichQuestionIsIt;
     document.getElementById('questionFooter').classList.add('d-none');
     document.getElementById('leftSpace').classList.add('d-none');
+    document.getElementById('leftSpace').parentElement.style.justifyContent = 'center';
+    document.getElementById('menu5').classList.remove('borderLeftWhite');
 }
 
 function youAreNotSoSmart() {
@@ -275,37 +296,29 @@ function resetAnswerButtons() {
 
 function doTheRightMenu() {
     if (whichQuestionIsIt == 3) {
-        secondMenu();
+        menu(1);
     }
     if (whichQuestionIsIt == 4) {
-        thirdMenu();
+        menu(2);
     }
     if (whichQuestionIsIt == 5) {
-        fourthMenu();
+        menu(3);
     }
     if (whichQuestionIsIt == 6) {
-        fifthMenu();
+        menu(4);
     }
 }
 
-function secondMenu() {
-    document.getElementById('menu1').classList.remove('borderLeftWhite');
-    document.getElementById('menu2').classList.add('borderLeftWhite');
+function clickableAnswerButtons() {
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`answer${i}`).parentElement.parentElement.style.pointerEvents= 'auto';
+    }
 }
 
-function thirdMenu() {
-    document.getElementById('menu2').classList.remove('borderLeftWhite');
-    document.getElementById('menu3').classList.add('borderLeftWhite');
-}
-
-function fourthMenu() {
-    document.getElementById('menu3').classList.remove('borderLeftWhite');
-    document.getElementById('menu4').classList.add('borderLeftWhite');   
-}
-
-function fifthMenu() {
-    document.getElementById('menu4').classList.remove('borderLeftWhite');
-    document.getElementById('menu5').classList.add('borderLeftWhite');  
+function menu(i) {
+    document.getElementById(`menu${i}`).classList.remove('borderLeftWhite');
+    i++;
+    document.getElementById(`menu${i}`).classList.add('borderLeftWhite');
 }
 
 function newGame() {
@@ -318,6 +331,7 @@ function newGame() {
     resetCard();
     resetAnswerButtons();
     showQuestion();
+    clickableAnswerButtons();
 }
 
 function resetAndPlayAudioNewGame() {
@@ -344,7 +358,7 @@ function resetMenu() {
 }
 
 function resetProcessBar() {
-    document.getElementById('progressBar').style = '';
+    document.getElementById('progressBar').style = 'width: 0%';
     document.getElementById('progressBar').innerHTML = '';
 }
 
@@ -362,4 +376,8 @@ function resetCard() {
     document.getElementById('cardBody1').style = 'display: none';
     document.getElementById('cardBody3').style = 'display: none';
     document.getElementById('endscreenButton').style = 'display: none';
+    document.getElementById('leftSpace').parentElement.style.justifyContent = 'normal';
+    if (window.screen.width <= 500) {
+        document.getElementById('leftSpace').parentElement.style.justifyContent = 'center';
+      }
 }

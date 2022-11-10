@@ -31,7 +31,7 @@
                     <img src="./img/logo.png" alt="Quizapp">
                 </div>
                 <div class="menu">
-                    <div class="borderLeftWhite" id="menu1">
+                    <div id="menu1">
                         Vitamine
                     </div>
                     <div id="menu2">
@@ -48,8 +48,8 @@
                     </div>
                 </div>
                 <div class="leftContainerFirstLastChild">
-                    <span>
-                        <b id="whichQuestion">1</b> von <b id="allQuestions">5</b> Fragen
+                    <span id="leftContLastChildSpan" style="display: none">
+                        <b id="whichQuestion">1</b> von <b id="allQuestions"></b> Fragen
                     </span>
                 </div>
             </div>
@@ -79,7 +79,7 @@
 
                 <div id="cardBody3" class="card-body textCenter flexNone cardBodyAbsolute2" style="display: none">YOUR SCORE <b id="amountOfRightAnswers">X</b><b>/</b><b id="amountOfAllAnswers">X</b></div>
 
-                <div class="justCenter padding16Px cardBodyAbsolute3" id="endscreenButton" style="display: none"><button onclick="newGame()" class="btn btn-primary">REPLAY</button></div>
+                <div class="justCenter padding16Px cardBodyAbsolute3" id="endscreenButton" style="display: none"><button onclick="newGame()" class="btn btn-primary replaybtn">REPLAY</button></div>
 
                 <div class="card-body justAround " style="display: none" id="cardBody2">
                     <h5 class="card-title mainQuestion" id="questiontext">Frage</h5>
